@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-
     public float speed = 5f;
     private Rigidbody2D playerRigidbody2D;
-
+    private Vector2 newPosition;
+    private float horizontalInput;
+    private float verticalInput;
 
     // Start is called before the first frame update
     void Start()
@@ -18,10 +19,14 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float horizontalInput = Input.GetAxis("Horizontal");
-        float verticalInput = Input.GetAxis("Vertical");
+        horizontalInput = Input.GetAxis("Horizontal");
+        verticalInput = Input.GetAxis("Vertical");
 
-        Vector2 movement = new Vector2(horizontalInput, verticalInput) * speed;
-        playerRigidbody2D.velocity = movement;
+        newPosition = new Vector2(horizontalInput, verticalInput).normalized * speed;
+    }
+
+    void FixedUpdate()
+    {
+        playerRigidbody2D.MovePosition(playerRigidbody2D.position + (newPosition * Time.fixedDeltaTime));
     }
 }
